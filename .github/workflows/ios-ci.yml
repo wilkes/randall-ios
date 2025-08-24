@@ -22,7 +22,19 @@ jobs:
       run: xcodebuild -version
       
     - name: Show Available Simulators
-      run: xcrun simctl list devices available | grep -E "(iPhone|iPad)" | head -10
+      run: xcrun simctl list devices available
+      
+    - name: List iOS runtimes
+      run: xcrun simctl list runtimes | grep iOS
+      
+    - name: Create iPhone 15 simulator if needed
+      run: |
+        if ! xcrun simctl list devices | grep -q "iPhone 15"; then
+          # Get the latest iOS runtime
+          RUNTIME=$(xcrun simctl list runtimes | grep iOS | tail -1 | sed 's/.*iOS \([0-9.]*\).*/\1/')
+          echo "Creating iPhone 15 with iOS $RUNTIME"
+          xcrun simctl create "iPhone 15" "iPhone 15" "com.apple.CoreSimulator.SimRuntime.iOS-${RUNTIME//./-}"
+        fi
       
     - name: Cache derived data
       uses: actions/cache@v4
@@ -37,7 +49,7 @@ jobs:
         xcodebuild \
           -project "Randall iOS.xcodeproj" \
           -scheme "Randall iOS" \
-          -destination "platform=iOS Simulator,name=iPhone 16" \
+          -destination "platform=iOS Simulator,name=iPhone 15" \
           -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
@@ -48,7 +60,7 @@ jobs:
         xcodebuild \
           -project "Randall iOS.xcodeproj" \
           -scheme "Randall iOS" \
-          -destination "platform=iOS Simulator,name=iPhone 16" \
+          -destination "platform=iOS Simulator,name=iPhone 15" \
           -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
