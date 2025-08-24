@@ -7,8 +7,8 @@ struct RandomTriadsView: View {
         SimpleGridExercise(
             title: "Random Triads",
             items: currentTriads,
-            columnCount: 4,
-            itemHeight: 50,
+            columnCount: ExerciseLayoutConfig.randomTriads.columnCount,
+            itemHeight: ExerciseLayoutConfig.randomTriads.itemHeight,
             onRefresh: generateRandomTriads
         )
         .onAppear {

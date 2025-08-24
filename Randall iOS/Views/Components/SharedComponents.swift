@@ -16,14 +16,14 @@ struct ExerciseHeaderCard: View {
                 Spacer()
                 
                 Button(action: onRefresh) {
-                    HStack(spacing: 6) {
+                    HStack(spacing: UIConfiguration.Spacing.small) {
                         Image(systemName: "arrow.clockwise")
                         Text("Refresh")
                     }
                     .font(.subheadline.weight(.medium))
                     .foregroundColor(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, UIConfiguration.Padding.medium)
+                    .padding(.vertical, UIConfiguration.Padding.small)
                     .background(Color.accentColor)
                     .clipShape(Capsule())
                 }
@@ -32,7 +32,7 @@ struct ExerciseHeaderCard: View {
         }
         .padding()
         .background(Color(UIColor.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.large))
         .padding(.horizontal)
     }
 }
@@ -43,13 +43,13 @@ struct ParameterCard: View {
     let icon: String
     
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: UIConfiguration.Spacing.large) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundColor(.accentColor)
-                .frame(width: 24)
+                .frame(width: UIConfiguration.Frame.iconWidth)
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: UIConfiguration.Spacing.extraSmall) {
                 Text(title)
                     .font(.caption.weight(.medium))
                     .foregroundColor(.secondary)
@@ -82,7 +82,7 @@ struct GridItemView: View {
             .frame(height: height)
             .frame(maxWidth: .infinity)
             .background(Color(UIColor.tertiarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.small))
     }
 }
 
@@ -92,7 +92,7 @@ struct ComingSoonView: View {
     
     var body: some View {
         GenericExerciseContainer(title: title, onRefresh: {}, content: {
-            VStack(spacing: 24) {
+            VStack(spacing: UIConfiguration.Spacing.xxlarge) {
                 Image(systemName: icon)
                     .font(.system(size: 48))
                     .foregroundColor(.secondary)
@@ -102,7 +102,7 @@ struct ComingSoonView: View {
                     .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity)
-            .padding(.top, 40)
+            .padding(.top, UIConfiguration.Frame.topPadding)
         })
     }
 }
@@ -115,8 +115,8 @@ struct ExerciseGrid<Item: Identifiable>: View {
     
     init(
         items: [Item],
-        columnCount: Int = 3,
-        itemHeight: CGFloat = 60,
+        columnCount: Int = UIConfiguration.Grid.defaultColumnCount,
+        itemHeight: CGFloat = UIConfiguration.Grid.defaultItemHeight,
         itemContent: @escaping (Item) -> String
     ) {
         self.items = items
@@ -126,7 +126,7 @@ struct ExerciseGrid<Item: Identifiable>: View {
     }
     
     var body: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: columnCount), spacing: 12) {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: UIConfiguration.Grid.defaultSpacing), count: columnCount), spacing: UIConfiguration.Grid.defaultSpacing) {
             ForEach(items) { item in
                 GridItemView(text: itemContent(item), height: itemHeight)
             }
@@ -143,7 +143,7 @@ struct GenericExerciseContainer<Content: View>: View {
     
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 20) {
+            LazyVStack(spacing: UIConfiguration.Spacing.extraLarge) {
                 ExerciseHeaderCard(title: title, onRefresh: onRefresh)
                 
                 content()
@@ -165,8 +165,8 @@ struct SimpleGridExercise: View {
     init(
         title: String,
         items: [String],
-        columnCount: Int = 3,
-        itemHeight: CGFloat = 60,
+        columnCount: Int = UIConfiguration.Grid.defaultColumnCount,
+        itemHeight: CGFloat = UIConfiguration.Grid.defaultItemHeight,
         onRefresh: @escaping () -> Void
     ) {
         self.title = title
@@ -178,7 +178,7 @@ struct SimpleGridExercise: View {
     
     var body: some View {
         GenericExerciseContainer(title: title, onRefresh: onRefresh) {
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: columnCount), spacing: 12) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: UIConfiguration.Grid.defaultSpacing), count: columnCount), spacing: UIConfiguration.Grid.defaultSpacing) {
                 ForEach(items.indices, id: \.self) { index in
                     GridItemView(text: items[index], height: itemHeight)
                 }
@@ -196,7 +196,7 @@ struct ParameterExercise: View {
     
     var body: some View {
         GenericExerciseContainer(title: title, onRefresh: onRefresh) {
-            VStack(spacing: 16) {
+            VStack(spacing: UIConfiguration.Spacing.large) {
                 ForEach(parameters) { parameter in
                     ParameterCard(title: parameter.title, value: parameter.value, icon: parameter.icon)
                 }

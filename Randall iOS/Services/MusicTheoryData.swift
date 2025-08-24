@@ -59,12 +59,12 @@ struct MusicTheoryData {
     static let tempoRange = 60...200
 }
 
-// MARK: - Exercise Configuration
+// MARK: - Exercise Configuration (Deprecated - Use UIConfiguration instead)
 struct ExerciseConfiguration {
-    static let defaultChordCount = 12
-    static let defaultTriadCount = 12
+    static let defaultChordCount = UIConfiguration.Exercise.defaultItemCount
+    static let defaultTriadCount = UIConfiguration.Exercise.defaultItemCount
     static let animationDuration = 0.4
-    static let gridSpacing: CGFloat = 12
-    static let cardCornerRadius: CGFloat = 12
-    static let itemCornerRadius: CGFloat = 8
+    static let gridSpacing: CGFloat = UIConfiguration.Grid.defaultSpacing
+    static let cardCornerRadius: CGFloat = UIConfiguration.CornerRadius.large
+    static let itemCornerRadius: CGFloat = UIConfiguration.CornerRadius.small
 }
