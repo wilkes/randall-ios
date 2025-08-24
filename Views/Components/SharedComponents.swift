@@ -91,24 +91,19 @@ struct ComingSoonView: View {
     let icon: String
     
     var body: some View {
-        VStack(spacing: 24) {
-            Image(systemName: icon)
-                .font(.system(size: 48))
-                .foregroundColor(.secondary)
-            
-            VStack(spacing: 8) {
-                Text(title)
-                    .font(.title2.weight(.semibold))
-                    .foregroundColor(.primary)
+        GenericExerciseContainer(title: title, onRefresh: {}) {
+            VStack(spacing: 24) {
+                Image(systemName: icon)
+                    .font(.system(size: 48))
+                    .foregroundColor(.secondary)
                 
                 Text("Coming Soon")
                     .font(.body)
                     .foregroundColor(.secondary)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 40)
         }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(UIColor.systemBackground))
     }
 }
 
@@ -137,5 +132,90 @@ struct ExerciseGrid<Item: Identifiable>: View {
             }
         }
         .padding(.horizontal)
+    }
+}
+
+// MARK: - Generic Exercise Container
+struct GenericExerciseContainer<Content: View>: View {
+    let title: String
+    let onRefresh: () -> Void
+    @ViewBuilder let content: () -> Content
+    
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 20) {
+                ExerciseHeaderCard(title: title, onRefresh: onRefresh)
+                
+                content()
+            }
+            .padding(.vertical)
+        }
+        .background(Color(UIColor.systemBackground))
+    }
+}
+
+// MARK: - Simple String Grid Container
+struct SimpleGridExercise: View {
+    let title: String
+    let items: [String]
+    let columnCount: Int
+    let itemHeight: CGFloat
+    let onRefresh: () -> Void
+    
+    init(
+        title: String,
+        items: [String],
+        columnCount: Int = 3,
+        itemHeight: CGFloat = 60,
+        onRefresh: @escaping () -> Void
+    ) {
+        self.title = title
+        self.items = items
+        self.columnCount = columnCount
+        self.itemHeight = itemHeight
+        self.onRefresh = onRefresh
+    }
+    
+    var body: some View {
+        GenericExerciseContainer(title: title, onRefresh: onRefresh) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: columnCount), spacing: 12) {
+                ForEach(items.indices, id: \.self) { index in
+                    GridItemView(text: items[index], height: itemHeight)
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+}
+
+// MARK: - Parameter Cards Exercise Container
+struct ParameterExercise: View {
+    let title: String
+    let parameters: [ExerciseParameter]
+    let onRefresh: () -> Void
+    
+    var body: some View {
+        GenericExerciseContainer(title: title, onRefresh: onRefresh) {
+            VStack(spacing: 16) {
+                ForEach(parameters) { parameter in
+                    ParameterCard(title: parameter.title, value: parameter.value, icon: parameter.icon)
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+}
+
+// MARK: - Exercise Parameter Model
+struct ExerciseParameter: Identifiable {
+    let id = UUID()
+    let title: String
+    let value: String
+    let icon: String
+    
+    init(title: String, value: String, icon: String) {
+        self.title = title
+        self.value = value
+        self.icon = icon
     }
 }

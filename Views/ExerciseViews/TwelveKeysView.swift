@@ -4,27 +4,20 @@ struct TwelveKeysView: View {
     @State private var currentKeys: [String] = []
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 20) {
-                ExerciseHeaderCard(title: "12 Keys", onRefresh: generateRandomKeys)
-                
-                // Key Grid
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
-                    ForEach(currentKeys.indices, id: \.self) { index in
-                        Text(currentKeys[index])
-                            .font(.title2.weight(.semibold))
-                            .foregroundColor(.primary)
-                            .frame(height: 60)
-                            .frame(maxWidth: .infinity)
-                            .background(Color(UIColor.tertiarySystemBackground))
-                            .clipShape(RoundedRectangle(cornerRadius: ExerciseConfiguration.itemCornerRadius))
-                    }
+        GenericExerciseContainer(title: "12 Keys", onRefresh: generateRandomKeys) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
+                ForEach(currentKeys.indices, id: \.self) { index in
+                    Text(currentKeys[index])
+                        .font(.title2.weight(.semibold))
+                        .foregroundColor(.primary)
+                        .frame(height: 60)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(UIColor.tertiarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: ExerciseConfiguration.itemCornerRadius))
                 }
-                .padding(.horizontal)
             }
-            .padding(.vertical)
+            .padding(.horizontal)
         }
-        .background(Color(UIColor.systemBackground))
         .onAppear {
             if currentKeys.isEmpty {
                 generateRandomKeys()

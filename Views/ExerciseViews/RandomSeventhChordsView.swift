@@ -4,21 +4,13 @@ struct RandomSeventhChordsView: View {
     @State private var currentChords: [String] = []
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 20) {
-                ExerciseHeaderCard(title: "Random 7th Chords", onRefresh: generateRandomChords)
-                
-                // Chord Grid
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
-                    ForEach(currentChords.indices, id: \.self) { index in
-                        GridItemView(text: currentChords[index])
-                    }
-                }
-                .padding(.horizontal)
-            }
-            .padding(.vertical)
-        }
-        .background(Color(UIColor.systemBackground))
+        SimpleGridExercise(
+            title: "Random 7th Chords",
+            items: currentChords,
+            columnCount: 3,
+            itemHeight: 60,
+            onRefresh: generateRandomChords
+        )
         .onAppear {
             if currentChords.isEmpty {
                 generateRandomChords()

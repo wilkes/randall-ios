@@ -3,23 +3,21 @@ import SwiftUI
 struct GoodrickOneStringVampView: View {
     @State private var currentVamp = GoodrickVamp(string: "B", key: "Db", mode: "Locrian", tempo: "123")
     
+    private var parameters: [ExerciseParameter] {
+        [
+            ExerciseParameter(title: "String", value: currentVamp.string, icon: "guitars"),
+            ExerciseParameter(title: "Key", value: currentVamp.key, icon: "music.note"),
+            ExerciseParameter(title: "Mode", value: currentVamp.mode, icon: "waveform"),
+            ExerciseParameter(title: "Tempo", value: currentVamp.tempo, icon: "metronome")
+        ]
+    }
+    
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 20) {
-                ExerciseHeaderCard(title: "Goodrick One String Vamp", onRefresh: generateRandomVamp)
-                
-                // Parameter Cards
-                VStack(spacing: 16) {
-                    ParameterCard(title: "String", value: currentVamp.string, icon: "guitars")
-                    ParameterCard(title: "Key", value: currentVamp.key, icon: "music.note")
-                    ParameterCard(title: "Mode", value: currentVamp.mode, icon: "waveform")
-                    ParameterCard(title: "Tempo", value: currentVamp.tempo, icon: "metronome")
-                }
-                .padding(.horizontal)
-            }
-            .padding(.vertical)
-        }
-        .background(Color(UIColor.systemBackground))
+        ParameterExercise(
+            title: "Goodrick One String Vamp",
+            parameters: parameters,
+            onRefresh: generateRandomVamp
+        )
         .onAppear {
             generateRandomVamp()
         }
