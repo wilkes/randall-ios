@@ -1,66 +1,127 @@
-//
-//  ContentView.swift
-//  Randall iOS
-//
-//  Created by Wilkes Joiner on 8/24/25.
-//
-
 import SwiftUI
-import SwiftData
 
-struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+// MARK: - Models
+struct Exercise {
+    let id = UUID()
+    let name: String
+    let type: ExerciseType
+}
 
-    var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+enum ExerciseType: CaseIterable {
+    case randomSeventhChords
+    case goodrickOneStringVamp
+    case randomTriads
+    case krantzFormula
+    case twelveKeys
+    case goodrickTwoStringVamp
+    case fingering
+    case randomExercise
+    
+    var displayName: String {
+        switch self {
+        case .randomSeventhChords: return "Random 7th Chords"
+        case .goodrickOneStringVamp: return "Goodrick One String Vamp"
+        case .randomTriads: return "Random Triads"
+        case .krantzFormula: return "Krantz Formula"
+        case .twelveKeys: return "12 Keys"
+        case .goodrickTwoStringVamp: return "Goodrick Two String Vamp"
+        case .fingering: return "Fingering"
+        case .randomExercise: return "Random Exercise"
         }
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+// MARK: - Data Models
+struct SeventhChord {
+    let name: String
+}
+
+struct TriadChord {
+    let name: String
+}
+
+struct GoodrickVamp {
+    let string: String
+    let key: String
+    let mode: String
+    let tempo: String
+}
+
+struct KrantzFormula {
+    let key: String
+    let zone: String
+    let tempo: String
+    let formula: String
+}
+
+// MARK: - Content View
+struct ContentView: View {
+    @State private var selectedExercise: ExerciseType = .randomSeventhChords
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Compact Exercise Picker
+                HStack {
+                    Picker("Exercise", selection: $selectedExercise) {
+                        ForEach(ExerciseType.allCases, id: \.self) { exercise in
+                            Text(exercise.displayName)
+                                .tag(exercise)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .accentColor(.blue)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+                
+                // Exercise Content
+                ExerciseContentView(exerciseType: selectedExercise)
+                
+                Spacer()
+            }
+            .navigationTitle("Exercises")
+            .navigationBarTitleDisplayMode(.large)
+            .background(Color(UIColor.systemBackground))
+        }
+        .navigationViewStyle(.stack)
+    }
+}
+
+// MARK: - Exercise Content View
+struct ExerciseContentView: View {
+    let exerciseType: ExerciseType
+    
+    var body: some View {
+        switch exerciseType {
+        case .randomSeventhChords:
+            RandomSeventhChordsView()
+        case .goodrickOneStringVamp:
+            GoodrickOneStringVampView()
+        case .randomTriads:
+            RandomTriadsView()
+        case .krantzFormula:
+            KrantzFormulaView()
+        case .twelveKeys:
+            TwelveKeysView()
+        case .goodrickTwoStringVamp:
+            GoodrickTwoStringVampView()
+        case .fingering:
+            FingeringView()
+        case .randomExercise:
+            RandomExerciseView()
+        }
+    }
+}
+
+// MARK: - Preview
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .preferredColorScheme(.light)
+        ContentView()
+            .preferredColorScheme(.dark)
+    }
 }
