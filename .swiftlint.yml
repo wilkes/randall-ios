@@ -9,6 +9,8 @@ opt_in_rules:
   - implicitly_unwrapped_optional
   - overridden_super_call
   - redundant_nil_coalescing
+
+analyzer_rules:
   - unused_import
 
 included:
@@ -23,9 +25,6 @@ excluded:
   - DerivedData
 
 # Rule Configurations
-line_length:
-  warning: 120
-  error: 150
 
 file_length:
   warning: 500

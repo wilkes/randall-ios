@@ -4,10 +4,8 @@ struct FingeringView: View {
     @State private var currentPattern = FingeringPattern(startFret: 1, pattern: "1234", string: "E (6th)")
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 20) {
-                ExerciseHeaderCard(title: "Fingering Exercise", onRefresh: generateRandomPattern)
-                
+        GenericExerciseContainer(title: "Fingering Exercise", onRefresh: generateRandomPattern) {
+            VStack(spacing: 20) {
                 // Exercise Description
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Chromatic Exercise")
@@ -74,9 +72,7 @@ struct FingeringView: View {
                     .padding(.horizontal)
                 }
             }
-            .padding(.vertical)
         }
-        .background(Color(UIColor.systemBackground))
         .onAppear {
             generateRandomPattern()
         }
