@@ -1,7 +1,7 @@
 import Testing
 @testable import Randall_iOS
 
-struct Randall_iOSTests {
+struct RandallIOSTests {
     
     @Test("App launches without crashing")
     func appLaunches() async throws {

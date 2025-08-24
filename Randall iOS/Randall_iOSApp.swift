@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct Randall_iOSApp: App {
+struct RandallIOSApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self
