@@ -28,65 +28,35 @@ struct ExerciseFactory {
     
     /// Exercise metadata for configuration and display
     static func getMetadata(for exerciseType: ExerciseType) -> ExerciseMetadata {
+        let config = getExerciseConfiguration(for: exerciseType)
+        return ExerciseMetadata(
+            title: exerciseType.displayName,
+            category: config.category,
+            difficulty: config.difficulty,
+            estimatedDuration: config.duration
+        )
+    }
+    
+    /// Get exercise configuration parameters
+    private static func getExerciseConfiguration(for exerciseType: ExerciseType) -> ExerciseConfig {
         switch exerciseType {
-        case .randomSeventhChords:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .chords,
-                difficulty: .beginner,
-                estimatedDuration: 5
-            )
-        case .goodrickOneStringVamp:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .scales,
-                difficulty: .intermediate,
-                estimatedDuration: 10
-            )
-        case .randomTriads:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .chords,
-                difficulty: .beginner,
-                estimatedDuration: 3
-            )
-        case .krantzFormula:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .scales,
-                difficulty: .advanced,
-                estimatedDuration: 15
-            )
-        case .twelveKeys:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .theory,
-                difficulty: .intermediate,
-                estimatedDuration: 8
-            )
-        case .goodrickTwoStringVamp:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .scales,
-                difficulty: .advanced,
-                estimatedDuration: 12
-            )
-        case .fingering:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .technique,
-                difficulty: .beginner,
-                estimatedDuration: 7
-            )
-        case .randomExercise:
-            return ExerciseMetadata(
-                title: exerciseType.displayName,
-                category: .mixed,
-                difficulty: .intermediate,
-                estimatedDuration: 10
-            )
+        case .randomSeventhChords: return ExerciseConfig(category: .chords, difficulty: .beginner, duration: 5)
+        case .goodrickOneStringVamp: return ExerciseConfig(category: .scales, difficulty: .intermediate, duration: 10)
+        case .randomTriads: return ExerciseConfig(category: .chords, difficulty: .beginner, duration: 3)
+        case .krantzFormula: return ExerciseConfig(category: .scales, difficulty: .advanced, duration: 15)
+        case .twelveKeys: return ExerciseConfig(category: .theory, difficulty: .intermediate, duration: 8)
+        case .goodrickTwoStringVamp: return ExerciseConfig(category: .scales, difficulty: .advanced, duration: 12)
+        case .fingering: return ExerciseConfig(category: .technique, difficulty: .beginner, duration: 7)
+        case .randomExercise: return ExerciseConfig(category: .mixed, difficulty: .intermediate, duration: 10)
         }
     }
+}
+
+// MARK: - Exercise Configuration
+private struct ExerciseConfig {
+    let category: ExerciseCategory
+    let difficulty: ExerciseDifficulty
+    let duration: Int
 }
 
 // MARK: - Exercise Metadata
