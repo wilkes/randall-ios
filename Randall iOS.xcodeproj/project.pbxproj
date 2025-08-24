@@ -29,9 +29,31 @@
 		5A78B0942E5B758100A4F65D /* Randall iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Randall iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5A8267392E5B91D6004C24E3 /* Exceptions for "Randall iOS" folder in "Randall iOSTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/ExerciseModels.swift,
+				Services/MusicTheoryData.swift,
+				Views/Components/SharedComponents.swift,
+				Views/ExerciseViews/FingeringView.swift,
+				Views/ExerciseViews/GoodrickOneStringVampView.swift,
+				Views/ExerciseViews/KrantzFormulaView.swift,
+				Views/ExerciseViews/PlaceholderViews.swift,
+				Views/ExerciseViews/RandomSeventhChordsView.swift,
+				Views/ExerciseViews/RandomTriadsView.swift,
+				Views/ExerciseViews/TwelveKeysView.swift,
+			);
+			target = 5A78B0892E5B758100A4F65D /* Randall iOSTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5A78B07C2E5B757F00A4F65D /* Randall iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5A8267392E5B91D6004C24E3 /* Exceptions for "Randall iOS" folder in "Randall iOSTests" target */,
+			);
 			path = "Randall iOS";
 			sourceTree = "<group>";
 		};

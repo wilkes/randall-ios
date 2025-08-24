@@ -91,7 +91,7 @@ struct ComingSoonView: View {
     let icon: String
     
     var body: some View {
-        GenericExerciseContainer(title: title, onRefresh: {}) {
+        GenericExerciseContainer(title: title, onRefresh: {}, content: {
             VStack(spacing: 24) {
                 Image(systemName: icon)
                     .font(.system(size: 48))
@@ -103,7 +103,7 @@ struct ComingSoonView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.top, 40)
-        }
+        })
     }
 }
 
