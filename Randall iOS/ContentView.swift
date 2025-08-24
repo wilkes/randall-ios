@@ -41,24 +41,7 @@ struct ExerciseContentView: View {
     let exerciseType: ExerciseType
     
     var body: some View {
-        switch exerciseType {
-        case .randomSeventhChords:
-            RandomSeventhChordsView()
-        case .goodrickOneStringVamp:
-            GoodrickOneStringVampView()
-        case .randomTriads:
-            RandomTriadsView()
-        case .krantzFormula:
-            KrantzFormulaView()
-        case .twelveKeys:
-            TwelveKeysView()
-        case .goodrickTwoStringVamp:
-            GoodrickTwoStringVampView()
-        case .fingering:
-            FingeringView()
-        case .randomExercise:
-            RandomExerciseView()
-        }
+        ExerciseFactory.createView(for: exerciseType)
     }
 }
 
