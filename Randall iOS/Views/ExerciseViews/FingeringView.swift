@@ -5,9 +5,9 @@ struct FingeringView: View {
     
     var body: some View {
         GenericExerciseContainer(title: "Fingering Exercise", onRefresh: generateRandomPattern) {
-            VStack(spacing: 20) {
+            VStack(spacing: UIConfiguration.Spacing.extraLarge) {
                 // Exercise Description
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: UIConfiguration.Spacing.large) {
                     Text("Chromatic Exercise")
                         .font(.headline)
                         .foregroundColor(.primary)
@@ -19,23 +19,23 @@ struct FingeringView: View {
                 }
                 .padding()
                 .background(Color(UIColor.tertiarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.medium))
                 .padding(.horizontal)
                 
                 // Pattern Details
-                VStack(spacing: 16) {
+                VStack(spacing: UIConfiguration.Spacing.large) {
                     ParameterCard(title: "Starting Fret", value: String(currentPattern.startFret), icon: "number")
                     ParameterCard(title: "String", value: currentPattern.string, icon: "guitars")
                     
                     // Finger Pattern Display
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack(spacing: 16) {
+                    VStack(alignment: .leading, spacing: UIConfiguration.Spacing.medium) {
+                        HStack(spacing: UIConfiguration.Spacing.large) {
                             Image(systemName: "hand.point.up.left")
                                 .font(.title3)
                                 .foregroundColor(.accentColor)
-                                .frame(width: 24)
+                                .frame(width: UIConfiguration.Frame.iconWidth)
                             
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: UIConfiguration.Spacing.extraSmall) {
                                 Text("Finger Pattern")
                                     .font(.caption.weight(.medium))
                                     .foregroundColor(.secondary)
@@ -48,13 +48,13 @@ struct FingeringView: View {
                         }
                         
                         // Fret Numbers
-                        HStack(spacing: 16) {
+                        HStack(spacing: UIConfiguration.Spacing.large) {
                             Image(systemName: "music.note.list")
                                 .font(.title3)
                                 .foregroundColor(.accentColor)
-                                .frame(width: 24)
+                                .frame(width: UIConfiguration.Frame.iconWidth)
                             
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: UIConfiguration.Spacing.extraSmall) {
                                 Text("Frets to Play")
                                     .font(.caption.weight(.medium))
                                     .foregroundColor(.secondary)
@@ -68,7 +68,7 @@ struct FingeringView: View {
                     }
                     .padding()
                     .background(Color(UIColor.tertiarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.medium))
                     .padding(.horizontal)
                 }
             }

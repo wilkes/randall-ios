@@ -5,19 +5,19 @@ struct KrantzFormulaView: View {
     
     var body: some View {
         GenericExerciseContainer(title: "Krantz Formula", onRefresh: generateRandomFormula) {
-            VStack(spacing: 16) {
+            VStack(spacing: UIConfiguration.Spacing.large) {
                 ParameterCard(title: "Key", value: currentFormula.key, icon: "music.note")
                 ParameterCard(title: "Zone", value: currentFormula.zone, icon: "rectangle.grid.2x2")
                 ParameterCard(title: "Tempo", value: currentFormula.tempo, icon: "metronome")
                 
                 // Formula Card (custom layout for longer text)
-                HStack(spacing: 16) {
+                HStack(spacing: UIConfiguration.Spacing.large) {
                     Image(systemName: "function")
                         .font(.title3)
                         .foregroundColor(.accentColor)
-                        .frame(width: 24)
+                        .frame(width: UIConfiguration.Frame.iconWidth)
                     
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: UIConfiguration.Spacing.extraSmall) {
                         Text("Formula")
                             .font(.caption.weight(.medium))
                             .foregroundColor(.secondary)
@@ -31,7 +31,7 @@ struct KrantzFormulaView: View {
                 }
                 .padding()
                 .background(Color(UIColor.tertiarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.medium))
             }
             .padding(.horizontal)
         }

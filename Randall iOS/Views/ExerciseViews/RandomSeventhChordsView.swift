@@ -7,8 +7,8 @@ struct RandomSeventhChordsView: View {
         SimpleGridExercise(
             title: "Random 7th Chords",
             items: currentChords,
-            columnCount: 3,
-            itemHeight: 60,
+            columnCount: ExerciseLayoutConfig.randomSeventhChords.columnCount,
+            itemHeight: ExerciseLayoutConfig.randomSeventhChords.itemHeight,
             onRefresh: generateRandomChords
         )
         .onAppear {

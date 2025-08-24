@@ -20,8 +20,8 @@ struct ContentView: View {
                     
                     Spacer()
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
+                .padding(.horizontal, UIConfiguration.Padding.horizontal)
+                .padding(.vertical, UIConfiguration.Padding.vertical)
                 
                 // Exercise Content
                 ExerciseContentView(exerciseType: selectedExercise)
