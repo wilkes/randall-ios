@@ -239,7 +239,7 @@ struct MetronomeControls: View {
             // Tempo Display and Controls
             HStack(spacing: UIConfiguration.Spacing.large) {
                 // Tempo Decrease
-                Button(action: { decreaseTempo() }, label: {
+                Button(action: { decreaseTempo() }) {
                     Image(systemName: "minus.circle.fill")
                         .font(.title2)
                         .foregroundColor(.secondary)
@@ -258,7 +258,7 @@ struct MetronomeControls: View {
                 .frame(minWidth: 60)
                 
                 // Tempo Increase
-                Button(action: { increaseTempo() }, label: {
+                Button(action: { increaseTempo() }) {
                     Image(systemName: "plus.circle.fill")
                         .font(.title2)
                         .foregroundColor(.secondary)
@@ -273,12 +273,12 @@ struct MetronomeControls: View {
                         .fill(beat == metronome.currentBeat ? Color.accentColor : Color.secondary.opacity(0.3))
                         .frame(width: 8, height: 8)
                         .scaleEffect(beat == metronome.currentBeat ? 1.5 : 1.0)
-                        .animation(.easeInOut(duration: 0.1), value: metronome.currentBeat)
+                        .animation(UIConfiguration.Animation.beatIndicator, value: metronome.currentBeat)
                 }
             }
             
             // Play/Stop Button
-            Button(action: { metronome.toggle() }, label: {
+            Button(action: { metronome.toggle() }) {
                 HStack(spacing: UIConfiguration.Spacing.small) {
                     Image(systemName: metronome.isPlaying ? "pause.fill" : "play.fill")
                     Text(metronome.isPlaying ? "Stop" : "Start")
@@ -314,7 +314,7 @@ struct TempoPresets: View {
     var body: some View {
         HStack(spacing: UIConfiguration.Spacing.small) {
             ForEach(MetronomeService.TempoPreset.allCases, id: \.name) { preset in
-                Button(action: { metronome.setTempo(preset.tempo) }, label: {
+                Button(action: { metronome.setTempo(preset.tempo) }) {
                     Text(preset.name)
                         .font(.caption.weight(.medium))
                         .foregroundColor(isActivePreset(preset) ? .white : .secondary)

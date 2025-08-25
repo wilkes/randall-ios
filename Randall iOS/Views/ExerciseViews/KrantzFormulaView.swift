@@ -41,7 +41,7 @@ struct KrantzFormulaView: View {
     }
     
     private func generateRandomFormula() {
-        withAnimation(.easeInOut(duration: ExerciseConfiguration.animationDuration)) {
+        withAnimation(UIConfiguration.Animation.defaultEasing) {
             currentFormula = KrantzFormula(
                 key: MusicTheoryData.keys.randomElement() ?? "C",
                 zone: MusicTheoryData.krantzZones.randomElement() ?? "6 7 8 9",

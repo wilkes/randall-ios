@@ -19,7 +19,7 @@ struct RandomTriadsView: View {
     }
     
     private func generateRandomTriads() {
-        withAnimation(.easeInOut(duration: ExerciseConfiguration.animationDuration)) {
+        withAnimation(UIConfiguration.Animation.defaultEasing) {
             currentTriads = Array(MusicTheoryData.triads.shuffled().prefix(ExerciseConfiguration.defaultTriadCount))
         }
     }

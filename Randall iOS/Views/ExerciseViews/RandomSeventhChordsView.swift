@@ -19,7 +19,7 @@ struct RandomSeventhChordsView: View {
     }
     
     private func generateRandomChords() {
-        withAnimation(.easeInOut(duration: ExerciseConfiguration.animationDuration)) {
+        withAnimation(UIConfiguration.Animation.defaultEasing) {
             currentChords = Array(MusicTheoryData.seventhChords.shuffled().prefix(ExerciseConfiguration.defaultChordCount))
         }
     }

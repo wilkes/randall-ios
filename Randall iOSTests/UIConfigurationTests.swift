@@ -135,3 +135,84 @@ struct ThemeConfigurationTests {
         #expect(!ThemeConfiguration.Colors.accent.isEmpty)
     }
 }
+
+// MARK: - Animation Configuration Tests
+struct AnimationConfigurationTests {
+    
+    @Test("Animation duration constants are reasonable")
+    func animationDurationConstants() {
+        // Test all duration constants are positive and reasonable
+        #expect(UIConfiguration.Animation.defaultDuration > 0)
+        #expect(UIConfiguration.Animation.defaultDuration < 2.0) // Not too long for UI
+        
+        #expect(UIConfiguration.Animation.quickDuration > 0)
+        #expect(UIConfiguration.Animation.quickDuration < UIConfiguration.Animation.defaultDuration)
+        
+        #expect(UIConfiguration.Animation.slowDuration > 0)
+        #expect(UIConfiguration.Animation.slowDuration > UIConfiguration.Animation.defaultDuration)
+        #expect(UIConfiguration.Animation.slowDuration < 2.0) // Still reasonable for UI
+    }
+    
+    @Test("Animation duration ordering is logical")
+    func animationDurationOrdering() {
+        // Quick < Default < Slow
+        #expect(UIConfiguration.Animation.quickDuration < UIConfiguration.Animation.defaultDuration)
+        #expect(UIConfiguration.Animation.defaultDuration < UIConfiguration.Animation.slowDuration)
+    }
+    
+    @Test("Specific animation duration values")
+    func specificAnimationDurationValues() {
+        #expect(UIConfiguration.Animation.defaultDuration == 0.4)
+        #expect(UIConfiguration.Animation.quickDuration == 0.1)
+        #expect(UIConfiguration.Animation.slowDuration == 0.6)
+    }
+    
+    @Test("Animation easing types are properly configured")
+    func animationEasingTypes() {
+        // These tests verify the animations are created correctly
+        // We can't test the exact animation type, but we can ensure they're not nil
+        // and have reasonable durations embedded
+        let defaultEasing = UIConfiguration.Animation.defaultEasing
+        let quickEasing = UIConfiguration.Animation.quickEasing
+        let slowEasing = UIConfiguration.Animation.slowEasing
+        let beatIndicator = UIConfiguration.Animation.beatIndicator
+        
+        // Verify animations exist (not nil)
+        #expect(String(describing: defaultEasing).contains("easeInOut"))
+        #expect(String(describing: quickEasing).contains("easeInOut"))
+        #expect(String(describing: slowEasing).contains("easeInOut"))
+        #expect(String(describing: beatIndicator).contains("easeInOut"))
+    }
+    
+    @Test("Beat indicator animation matches quick animation")
+    func beatIndicatorAnimation() {
+        // Beat indicator should use quick duration for responsive feedback
+        let beatIndicator = UIConfiguration.Animation.beatIndicator
+        let quickEasing = UIConfiguration.Animation.quickEasing
+        
+        // Compare string representations to verify they're equivalent
+        #expect(String(describing: beatIndicator) == String(describing: quickEasing))
+    }
+}
+
+// MARK: - Animation Migration Tests
+struct AnimationMigrationTests {
+    
+    @Test("Deprecated animation duration matches new centralized value")
+    func deprecatedAnimationDurationCompatibility() {
+        // Ensure backward compatibility during migration
+        #expect(ExerciseConfiguration.animationDuration == UIConfiguration.Animation.defaultDuration)
+    }
+    
+    @Test("Animation constants are used consistently")
+    func animationConstantsConsistency() {
+        // Verify centralized constants maintain expected relationships
+        #expect(UIConfiguration.Animation.defaultDuration == 0.4)
+        #expect(UIConfiguration.Animation.quickDuration == 0.1)
+        #expect(UIConfiguration.Animation.slowDuration == 0.6)
+        
+        // Verify relationships
+        #expect(UIConfiguration.Animation.quickDuration * 4 == UIConfiguration.Animation.defaultDuration)
+        #expect(UIConfiguration.Animation.slowDuration == UIConfiguration.Animation.defaultDuration * 1.5)
+    }
+}

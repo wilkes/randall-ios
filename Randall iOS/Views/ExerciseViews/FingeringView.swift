@@ -79,7 +79,7 @@ struct FingeringView: View {
     }
     
     private func generateRandomPattern() {
-        withAnimation(.easeInOut(duration: ExerciseConfiguration.animationDuration)) {
+        withAnimation(UIConfiguration.Animation.defaultEasing) {
             currentPattern = FingeringPattern(
                 startFret: MusicTheoryData.fretRange.randomElement() ?? 1,
                 pattern: MusicTheoryData.fingeringPatterns.randomElement() ?? "1234",

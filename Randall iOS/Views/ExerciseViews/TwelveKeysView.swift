@@ -26,7 +26,7 @@ struct TwelveKeysView: View {
     }
     
     private func generateRandomKeys() {
-        withAnimation(.easeInOut(duration: ExerciseConfiguration.animationDuration)) {
+        withAnimation(UIConfiguration.Animation.defaultEasing) {
             currentKeys = MusicTheoryData.keys.shuffled()
         }
     }
