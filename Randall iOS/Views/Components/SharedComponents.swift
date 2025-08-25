@@ -139,18 +139,39 @@ struct ExerciseGrid<Item: Identifiable>: View {
 struct GenericExerciseContainer<Content: View>: View {
     let title: String
     let onRefresh: () -> Void
+    let showMetronome: Bool
     @ViewBuilder let content: () -> Content
+    @StateObject private var metronome = MetronomeService()
+    
+    init(title: String, onRefresh: @escaping () -> Void, showMetronome: Bool = true, @ViewBuilder content: @escaping () -> Content) {
+        self.title = title
+        self.onRefresh = onRefresh
+        self.showMetronome = showMetronome
+        self.content = content
+    }
     
     var body: some View {
         ScrollView {
             LazyVStack(spacing: UIConfiguration.Spacing.extraLarge) {
                 ExerciseHeaderCard(title: title, onRefresh: onRefresh)
                 
+                if showMetronome {
+                    VStack(spacing: UIConfiguration.Spacing.medium) {
+                        MetronomeControls(metronome: metronome)
+                        TempoPresets(metronome: metronome)
+                    }
+                    .padding(.horizontal)
+                }
+                
                 content()
             }
             .padding(.vertical)
         }
         .background(Color(UIColor.systemBackground))
+        .onDisappear {
+            // Stop metronome when leaving exercise
+            metronome.stop()
+        }
     }
 }
 
@@ -160,6 +181,7 @@ struct SimpleGridExercise: View {
     let items: [String]
     let columnCount: Int
     let itemHeight: CGFloat
+    let showMetronome: Bool
     let onRefresh: () -> Void
     
     init(
@@ -167,17 +189,19 @@ struct SimpleGridExercise: View {
         items: [String],
         columnCount: Int = UIConfiguration.Grid.defaultColumnCount,
         itemHeight: CGFloat = UIConfiguration.Grid.defaultItemHeight,
+        showMetronome: Bool = true,
         onRefresh: @escaping () -> Void
     ) {
         self.title = title
         self.items = items
         self.columnCount = columnCount
         self.itemHeight = itemHeight
+        self.showMetronome = showMetronome
         self.onRefresh = onRefresh
     }
     
     var body: some View {
-        GenericExerciseContainer(title: title, onRefresh: onRefresh) {
+        GenericExerciseContainer(title: title, onRefresh: onRefresh, showMetronome: showMetronome) {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: UIConfiguration.Grid.defaultSpacing), count: columnCount), spacing: UIConfiguration.Grid.defaultSpacing) {
                 ForEach(items.indices, id: \.self) { index in
                     GridItemView(text: items[index], height: itemHeight)
@@ -203,6 +227,114 @@ struct ParameterExercise: View {
             }
             .padding(.horizontal)
         }
+    }
+}
+
+// MARK: - Metronome Controls
+struct MetronomeControls: View {
+    @ObservedObject var metronome: MetronomeService
+    
+    var body: some View {
+        VStack(spacing: UIConfiguration.Spacing.medium) {
+            // Tempo Display and Controls
+            HStack(spacing: UIConfiguration.Spacing.large) {
+                // Tempo Decrease
+                Button(action: { decreaseTempo() }, label: {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(.secondary)
+                }
+                .disabled(metronome.tempo <= MetronomeService.tempoRange.lowerBound)
+                
+                // Tempo Display
+                VStack(spacing: UIConfiguration.Spacing.extraSmall) {
+                    Text("\(Int(metronome.tempo))")
+                        .font(.title.weight(.bold))
+                        .monospacedDigit()
+                    Text("BPM")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .frame(minWidth: 60)
+                
+                // Tempo Increase
+                Button(action: { increaseTempo() }, label: {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(.secondary)
+                }
+                .disabled(metronome.tempo >= MetronomeService.tempoRange.upperBound)
+            }
+            
+            // Beat Indicator
+            HStack(spacing: UIConfiguration.Spacing.small) {
+                ForEach(1...metronome.beatsPerMeasure, id: \.self) { beat in
+                    Circle()
+                        .fill(beat == metronome.currentBeat ? Color.accentColor : Color.secondary.opacity(0.3))
+                        .frame(width: 8, height: 8)
+                        .scaleEffect(beat == metronome.currentBeat ? 1.5 : 1.0)
+                        .animation(.easeInOut(duration: 0.1), value: metronome.currentBeat)
+                }
+            }
+            
+            // Play/Stop Button
+            Button(action: { metronome.toggle() }, label: {
+                HStack(spacing: UIConfiguration.Spacing.small) {
+                    Image(systemName: metronome.isPlaying ? "pause.fill" : "play.fill")
+                    Text(metronome.isPlaying ? "Stop" : "Start")
+                }
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.white)
+                .padding(.horizontal, UIConfiguration.Padding.medium)
+                .padding(.vertical, UIConfiguration.Padding.small)
+                .background(metronome.isPlaying ? Color.red : Color.accentColor)
+                .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.small))
+            }
+        }
+        .padding(.vertical, UIConfiguration.Padding.small)
+        .background(Color(UIColor.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.medium))
+    }
+    
+    private func increaseTempo() {
+        let increment: Double = metronome.tempo < 100 ? 1 : 5
+        metronome.setTempo(metronome.tempo + increment)
+    }
+    
+    private func decreaseTempo() {
+        let decrement: Double = metronome.tempo <= 100 ? 1 : 5
+        metronome.setTempo(metronome.tempo - decrement)
+    }
+}
+
+// MARK: - Tempo Presets
+struct TempoPresets: View {
+    @ObservedObject var metronome: MetronomeService
+    
+    var body: some View {
+        HStack(spacing: UIConfiguration.Spacing.small) {
+            ForEach(MetronomeService.TempoPreset.allCases, id: \.name) { preset in
+                Button(action: { metronome.setTempo(preset.tempo) }, label: {
+                    Text(preset.name)
+                        .font(.caption.weight(.medium))
+                        .foregroundColor(isActivePreset(preset) ? .white : .secondary)
+                        .padding(.horizontal, UIConfiguration.Padding.small)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.small)
+                                .fill(isActivePreset(preset) ? Color.accentColor : Color.clear)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.small)
+                                .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                        )
+                }
+            }
+        }
+    }
+    
+    private func isActivePreset(_ preset: MetronomeService.TempoPreset) -> Bool {
+        preset.range.contains(metronome.tempo)
     }
 }
 
