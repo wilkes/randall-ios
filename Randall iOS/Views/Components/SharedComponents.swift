@@ -235,62 +235,64 @@ struct MetronomeControls: View {
     @ObservedObject var metronome: MetronomeService
     
     var body: some View {
-        VStack(spacing: UIConfiguration.Spacing.medium) {
-            // Tempo Display and Controls
-            HStack(spacing: UIConfiguration.Spacing.large) {
+        HStack(spacing: UIConfiguration.Spacing.large) {
+            // Tempo Controls Section
+            HStack(spacing: UIConfiguration.Spacing.medium) {
                 // Tempo Decrease
                 Button(action: { decreaseTempo() }) {
                     Image(systemName: "minus.circle.fill")
-                        .font(.title2)
+                        .font(.title3)
                         .foregroundColor(.secondary)
                 }
                 .disabled(metronome.tempo <= MetronomeService.tempoRange.lowerBound)
                 
                 // Tempo Display
-                VStack(spacing: UIConfiguration.Spacing.extraSmall) {
+                VStack(spacing: 1) {
                     Text("\(Int(metronome.tempo))")
-                        .font(.title.weight(.bold))
+                        .font(.title2.weight(.bold))
                         .monospacedDigit()
                     Text("BPM")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
-                .frame(minWidth: 60)
+                .frame(minWidth: 50)
                 
                 // Tempo Increase
                 Button(action: { increaseTempo() }) {
                     Image(systemName: "plus.circle.fill")
-                        .font(.title2)
+                        .font(.title3)
                         .foregroundColor(.secondary)
                 }
                 .disabled(metronome.tempo >= MetronomeService.tempoRange.upperBound)
             }
             
             // Beat Indicator
-            HStack(spacing: UIConfiguration.Spacing.small) {
+            HStack(spacing: UIConfiguration.Spacing.extraSmall) {
                 ForEach(1...metronome.beatsPerMeasure, id: \.self) { beat in
                     Circle()
                         .fill(beat == metronome.currentBeat ? Color.accentColor : Color.secondary.opacity(0.3))
-                        .frame(width: 8, height: 8)
-                        .scaleEffect(beat == metronome.currentBeat ? 1.5 : 1.0)
+                        .frame(width: 6, height: 6)
+                        .scaleEffect(beat == metronome.currentBeat ? 1.3 : 1.0)
                         .animation(UIConfiguration.Animation.beatIndicator, value: metronome.currentBeat)
                 }
             }
             
             // Play/Stop Button
             Button(action: { metronome.toggle() }) {
-                HStack(spacing: UIConfiguration.Spacing.small) {
+                HStack(spacing: UIConfiguration.Spacing.extraSmall) {
                     Image(systemName: metronome.isPlaying ? "pause.fill" : "play.fill")
+                        .font(.system(size: 14, weight: .semibold))
                     Text(metronome.isPlaying ? "Stop" : "Start")
+                        .font(.system(size: 14, weight: .semibold))
                 }
-                .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.white)
-                .padding(.horizontal, UIConfiguration.Padding.medium)
-                .padding(.vertical, UIConfiguration.Padding.small)
+                .padding(.horizontal, UIConfiguration.Padding.small)
+                .padding(.vertical, 6)
                 .background(metronome.isPlaying ? Color.red : Color.accentColor)
                 .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.small))
             }
         }
+        .padding(.horizontal, UIConfiguration.Padding.medium)
         .padding(.vertical, UIConfiguration.Padding.small)
         .background(Color(UIColor.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: UIConfiguration.CornerRadius.medium))

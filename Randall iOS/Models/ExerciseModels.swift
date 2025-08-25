@@ -60,17 +60,25 @@ class RandomSeventhChordsExercise: ObservableObject, ExerciseProtocol {
     let title = "Random 7th Chords"
     
     @Published private(set) var currentChords: [String] = []
+    private let exerciseService: ExerciseServiceProtocol
+    
+    init(exerciseService: ExerciseServiceProtocol = ExerciseService.shared) {
+        self.exerciseService = exerciseService
+    }
     
     var isLoaded: Bool {
         !currentChords.isEmpty
     }
     
     var metadata: ExerciseMetadata {
-        ExerciseFactory.getMetadata(for: .randomSeventhChords)
+        exerciseService.getMetadata(for: .randomSeventhChords)
     }
     
     func refresh() {
-        currentChords = Array(MusicTheoryData.seventhChords.shuffled().prefix(ExerciseConfiguration.defaultChordCount))
+        let content = exerciseService.refreshContent(for: .randomSeventhChords)
+        if case .chords(let chords) = content {
+            currentChords = chords
+        }
     }
 }
 
@@ -80,17 +88,25 @@ class RandomTriadsExercise: ObservableObject, ExerciseProtocol {
     let title = "Random Triads"
     
     @Published private(set) var currentTriads: [String] = []
+    private let exerciseService: ExerciseServiceProtocol
+    
+    init(exerciseService: ExerciseServiceProtocol = ExerciseService.shared) {
+        self.exerciseService = exerciseService
+    }
     
     var isLoaded: Bool {
         !currentTriads.isEmpty
     }
     
     var metadata: ExerciseMetadata {
-        ExerciseFactory.getMetadata(for: .randomTriads)
+        exerciseService.getMetadata(for: .randomTriads)
     }
     
     func refresh() {
-        currentTriads = Array(MusicTheoryData.triads.shuffled().prefix(ExerciseConfiguration.defaultTriadCount))
+        let content = exerciseService.refreshContent(for: .randomTriads)
+        if case .triads(let triads) = content {
+            currentTriads = triads
+        }
     }
 }
 
@@ -100,17 +116,25 @@ class TwelveKeysExercise: ObservableObject, ExerciseProtocol {
     let title = "12 Keys"
     
     @Published private(set) var currentKeys: [String] = []
+    private let exerciseService: ExerciseServiceProtocol
+    
+    init(exerciseService: ExerciseServiceProtocol = ExerciseService.shared) {
+        self.exerciseService = exerciseService
+    }
     
     var isLoaded: Bool {
         !currentKeys.isEmpty
     }
     
     var metadata: ExerciseMetadata {
-        ExerciseFactory.getMetadata(for: .twelveKeys)
+        exerciseService.getMetadata(for: .twelveKeys)
     }
     
     func refresh() {
-        currentKeys = MusicTheoryData.keys.shuffled()
+        let content = exerciseService.refreshContent(for: .twelveKeys)
+        if case .keys(let keys) = content {
+            currentKeys = keys
+        }
     }
 }
 
@@ -125,21 +149,24 @@ class KrantzFormulaExercise: ObservableObject, ExerciseProtocol {
         tempo: "74", 
         formula: "1 2 b3 3 4 b5 5 7"
     )
+    private let exerciseService: ExerciseServiceProtocol
+    
+    init(exerciseService: ExerciseServiceProtocol = ExerciseService.shared) {
+        self.exerciseService = exerciseService
+    }
     
     var isLoaded: Bool {
         true // Always has default value
     }
     
     var metadata: ExerciseMetadata {
-        ExerciseFactory.getMetadata(for: .krantzFormula)
+        exerciseService.getMetadata(for: .krantzFormula)
     }
     
     func refresh() {
-        currentFormula = KrantzFormula(
-            key: MusicTheoryData.keys.randomElement() ?? "C",
-            zone: MusicTheoryData.krantzZones.randomElement() ?? "6 7 8 9",
-            tempo: String(Int.random(in: MusicTheoryData.tempoRange)),
-            formula: MusicTheoryData.krantzFormulas.randomElement() ?? "1 2 b3 3 4 b5 5 7"
-        )
+        let content = exerciseService.refreshContent(for: .krantzFormula)
+        if case .krantzFormula(let formula) = content {
+            currentFormula = formula
+        }
     }
 }
