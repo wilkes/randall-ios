@@ -109,7 +109,7 @@ struct ExerciseConfigurationTests {
     func defaultConfigurationValues() {
         #expect(ExerciseConfiguration.defaultChordCount == 12)
         #expect(ExerciseConfiguration.defaultTriadCount == 12)
-        #expect(ExerciseConfiguration.animationDuration == 0.4)
+        #expect(UIConfiguration.Animation.defaultDuration == 0.4)
         #expect(ExerciseConfiguration.gridSpacing == 12)
         #expect(ExerciseConfiguration.cardCornerRadius == 12)
         #expect(ExerciseConfiguration.itemCornerRadius == 8)
@@ -117,8 +117,8 @@ struct ExerciseConfigurationTests {
     
     @Test("Animation duration is positive")
     func animationDurationPositive() {
-        #expect(ExerciseConfiguration.animationDuration > 0)
-        #expect(ExerciseConfiguration.animationDuration < 1.0) // Reasonable for UI animations
+        #expect(UIConfiguration.Animation.defaultDuration > 0)
+        #expect(UIConfiguration.Animation.defaultDuration < 1.0) // Reasonable for UI animations
     }
     
     @Test("Grid spacing is positive")

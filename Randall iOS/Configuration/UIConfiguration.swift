@@ -51,6 +51,19 @@ struct UIConfiguration {
         static let defaultItemCount = 12
         static let randomItemCount = 5
     }
+    
+    // MARK: - Animation Configuration
+    struct Animation {
+        static let defaultDuration: Double = 0.4
+        static let quickDuration: Double = 0.1
+        static let slowDuration: Double = 0.6
+        
+        static let defaultEasing: SwiftUI.Animation = .easeInOut(duration: defaultDuration)
+        static let quickEasing: SwiftUI.Animation = .easeInOut(duration: quickDuration)
+        static let slowEasing: SwiftUI.Animation = .easeInOut(duration: slowDuration)
+        
+        static let beatIndicator: SwiftUI.Animation = .easeInOut(duration: quickDuration)
+    }
 }
 
 // MARK: - Exercise Layout Configuration

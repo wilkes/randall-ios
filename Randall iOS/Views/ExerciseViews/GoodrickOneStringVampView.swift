@@ -24,7 +24,7 @@ struct GoodrickOneStringVampView: View {
     }
     
     private func generateRandomVamp() {
-        withAnimation(.easeInOut(duration: ExerciseConfiguration.animationDuration)) {
+        withAnimation(UIConfiguration.Animation.defaultEasing) {
             currentVamp = GoodrickVamp(
                 string: MusicTheoryData.guitarStrings.randomElement() ?? "B",
                 key: MusicTheoryData.keys.randomElement() ?? "Db",

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 // MARK: - Centralized Music Theory Data
 struct MusicTheoryData {
@@ -63,7 +64,8 @@ struct MusicTheoryData {
 struct ExerciseConfiguration {
     static let defaultChordCount = UIConfiguration.Exercise.defaultItemCount
     static let defaultTriadCount = UIConfiguration.Exercise.defaultItemCount
-    static let animationDuration = 0.4
+    @available(*, deprecated, message: "Use UIConfiguration.Animation.defaultDuration instead")
+    static let animationDuration = UIConfiguration.Animation.defaultDuration
     static let gridSpacing: CGFloat = UIConfiguration.Grid.defaultSpacing
     static let cardCornerRadius: CGFloat = UIConfiguration.CornerRadius.large
     static let itemCornerRadius: CGFloat = UIConfiguration.CornerRadius.small
